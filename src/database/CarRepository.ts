@@ -34,4 +34,23 @@ export default class CarRepository {
     const result = await executeTransaction("SELECT * FROM cars");
     return result.rows._array;
   }
+
+  public async deleteById(id: number) {
+    await executeTransaction("DELETE FROM cars WHERE id = ?;", [id]);
+  }
+
+  public async findByModel(model: string) {
+    const result = await executeTransaction(
+      "SELECT * FROM cars WHERE model LIKE ?;",
+      [`%${model}%`]
+    );
+    return result.rows._array;
+  }
+
+  public async update(car: Car) {
+    await executeTransaction(
+      "UPDATE cars SET brand = ?, model = ?, hp = ? WHERE id = ?;",
+      [car.brand, car.model, car.hp, car.id]
+    );
+  }
 }
